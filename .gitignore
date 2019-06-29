@@ -1,0 +1,6 @@
+.ipynb_checkpoints
+data
+Pipfile.lock
+.DS_Store
+.idea
+__pycache__
