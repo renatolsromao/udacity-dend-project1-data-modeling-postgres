@@ -10,13 +10,13 @@ time_table_drop = "DROP TABLE IF EXISTS public.time;"
 
 songplay_table_create = ("""
     CREATE TABLE IF NOT EXISTS public.songplays (
-        songplay_id varchar,
-        start_time bigint,
-        user_id int,
-        level varchar,
+        songplay_id varchar PRIMARY KEY,
+        start_time bigint NOT NULL,
+        user_id int NOT NULL,
+        level varchar NOT NULL,
         song_id varchar,
         artist_id varchar,
-        session_id int,
+        session_id int NOT NULL,
         location varchar,
         user_agent text
     );
@@ -24,28 +24,28 @@ songplay_table_create = ("""
 
 user_table_create = ("""
     CREATE TABLE IF NOT EXISTS public.users (
-        user_id int,
-        first_name varchar,
-        last_name varchar,
-        gender char(1),
-        level varchar
+        user_id int PRIMARY KEY,
+        first_name varchar NOT NULL,
+        last_name varchar NOT NULL,
+        gender char(1) NOT NULL,
+        level varchar NOT NULL DEFAULT 'free'
     );
 """)
 
 song_table_create = ("""
     CREATE TABLE IF NOT EXISTS public.songs (
-        song_id varchar,
-        title varchar,
-        artist_id varchar,
-        year int,
+        song_id varchar PRIMARY KEY,
+        title varchar NOT NULL,
+        artist_id varchar NOT NULL,
+        year int NOT NULL,
         duration numeric
     );
 """)
 
 artist_table_create = ("""
     CREATE TABLE IF NOT EXISTS public.artists (
-        artist_id varchar,
-        name varchar,
+        artist_id varchar PRIMARY KEY,
+        name varchar NOT NULL,
         location varchar,
         latitude numeric,
         longitude numeric
@@ -54,13 +54,13 @@ artist_table_create = ("""
 
 time_table_create = ("""
     CREATE TABLE IF NOT EXISTS public.time (
-        start_time bigint, 
-        hour int, 
-        day int, 
-        week int, 
-        month int,  
-        year int, 
-        weekday int
+        start_time bigint PRIMARY KEY, 
+        hour int NOT NULL, 
+        day int NOT NULL, 
+        week int NOT NULL, 
+        month int NOT NULL,  
+        year int NOT NULL, 
+        weekday int NOT NULL
     );
 """)
 
@@ -70,23 +70,33 @@ songplay_table_insert = ("""
     INSERT INTO public.songplays 
     (songplay_id, start_time, user_id, level, song_id, artist_id, session_id, location, user_agent)
     VALUES
-    (%s, %s, %s, %s, %s, %s, %s, %s, %s);
+    (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+    ON CONFLICT DO NOTHING;
+    ;
 """)
 
 user_table_insert = ("""
-    INSERT INTO public.users (user_id, first_name, last_name, gender, level) VALUES (%s, %s, %s, %s, %s);
+    INSERT INTO public.users (user_id, first_name, last_name, gender, level) 
+    VALUES (%s, %s, %s, %s, %s)
+    ON CONFLICT DO NOTHING;
 """)
 
 song_table_insert = ("""
-    INSERT INTO public.songs (song_id, title, artist_id, year, duration) VALUES (%s, %s, %s, %s, %s);
+    INSERT INTO public.songs (song_id, title, artist_id, year, duration) 
+    VALUES (%s, %s, %s, %s, %s)
+    ON CONFLICT DO NOTHING;
 """)
 
 artist_table_insert = ("""
-    INSERT INTO public.artists (artist_id, name, location, latitude, longitude) VALUES (%s, %s, %s, %s, %s);
+    INSERT INTO public.artists (artist_id, name, location, latitude, longitude) 
+    VALUES (%s, %s, %s, %s, %s)
+    ON CONFLICT DO NOTHING;
 """)
 
 time_table_insert = ("""
-    INSERT INTO public.time (start_time, hour, day, week, month, year, weekday) VALUES (%s, %s, %s, %s, %s, %s, %s);
+    INSERT INTO public.time (start_time, hour, day, week, month, year, weekday) 
+    VALUES (%s, %s, %s, %s, %s, %s, %s)
+    ON CONFLICT DO NOTHING;
 """)
 
 # FIND SONGS
